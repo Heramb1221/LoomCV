@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default font stack */
+body {
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :root {
+    /* Base Colors */
+    --background: 0 0% 100%;
+    --foreground: 222 15% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 15% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 15% 15%;
+
+    /* Brand & Accent Colors */
+    --primary: 222 89% 55%; /* Modern blue for CTAs */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 16% 96%;
+    --secondary-foreground: 222 15% 15%;
+    --accent: 200 100% 45%; /* Subtle cyan-blue accent */
+    --accent-foreground: 0 0% 100%;
+
+    /* Neutral & Muted Colors */
+    --muted: 220 16% 96%;
+    --muted-foreground: 220 9% 46%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 220 13% 90%;
+    --input: 220 13% 90%;
+    --ring: 222 89% 55%;
+
+    /* Chart Colors (Professional Palette) */
+    --chart-1: 222 89% 55%;
+    --chart-2: 200 100% 45%;
+    --chart-3: 160 60% 45%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 340 75% 55%;
+
+    /* Radius */
+    --radius: 0.6rem;
+  }
+
+  .dark {
+    --background: 222 15% 10%;
+    --foreground: 0 0% 98%;
+    --card: 222 15% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 222 15% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 222 89% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 15% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 200 100% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 222 15% 18%;
+    --muted-foreground: 220 9% 65%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 222 15% 18%;
+    --input: 222 15% 18%;
+    --ring: 222 89% 65%;
+
+    --chart-1: 222 89% 60%;
+    --chart-2: 200 100% 55%;
+    --chart-3: 160 60% 50%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 340 75% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
