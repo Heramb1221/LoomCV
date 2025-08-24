@@ -31,8 +31,77 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GripHorizontal } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
+
+const groupedDegreeOptions: Record<string, string[]> = {
+  "Undergraduate Degrees": [
+    "Associate of Arts (AA)",
+    "Associate of Science (AS)",
+    "Associate of Applied Science (AAS)",
+    "Bachelor of Arts (BA)",
+    "Bachelor of Science (BSc)",
+    "Bachelor of Fine Arts (BFA)",
+    "Bachelor of Business Administration (BBA)",
+    "Bachelor of Commerce (BCom)",
+    "Bachelor of Computer Applications (BCA)",
+    "Bachelor of Engineering (BE)",
+    "Bachelor of Technology (BTech)",
+    "Bachelor of Architecture (BArch)",
+    "Bachelor of Medicine, Bachelor of Surgery (MBBS)",
+    "Bachelor of Dental Surgery (BDS)",
+    "Bachelor of Pharmacy (BPharm)",
+    "Bachelor of Education (BEd)",
+    "Bachelor of Law (LLB)",
+    "Bachelor of Nursing (BN/BSc Nursing)",
+    "Bachelor of Social Work (BSW)",
+    "Bachelor of Design (BDes)",
+    "Bachelor of Journalism & Mass Communication (BJMC)",
+  ],
+  "Graduate Degrees": [
+    "Master of Arts (MA)",
+    "Master of Science (MSc)",
+    "Master of Fine Arts (MFA)",
+    "Master of Business Administration (MBA)",
+    "Master of Commerce (MCom)",
+    "Master of Computer Applications (MCA)",
+    "Master of Engineering (ME)",
+    "Master of Technology (MTech)",
+    "Master of Architecture (MArch)",
+    "Master of Public Administration (MPA)",
+    "Master of Public Health (MPH)",
+    "Master of Education (MEd)",
+    "Master of Laws (LLM)",
+    "Master of Pharmacy (MPharm)",
+    "Master of Nursing (MSc Nursing)",
+    "Master of Social Work (MSW)",
+    "Master of Design (MDes)",
+    "Master of Journalism & Mass Communication (MJMC)",
+  ],
+  "Doctoral / Research Degrees": [
+    "Doctor of Philosophy (PhD)",
+    "Doctor of Science (DSc)",
+    "Doctor of Education (EdD)",
+    "Doctor of Business Administration (DBA)",
+    "Doctor of Engineering (DEng)",
+  ],
+  "Professional Degrees": [
+    "Doctor of Medicine (MD)",
+    "Doctor of Dental Surgery (DDS)",
+    "Doctor of Dental Medicine (DMD)",
+    "Doctor of Pharmacy (PharmD)",
+    "Doctor of Veterinary Medicine (DVM)",
+    "Doctor of Nursing Practice (DNP)",
+    "Juris Doctor (JD)",
+  ],
+  "Other / Specialized Degrees": [
+    "Diploma",
+    "Postgraduate Diploma (PGD)",
+    "Certificate",
+    "Higher National Diploma (HND)",
+    "Other",
+  ],
+};
 
 export default function EducationForm({
   resumeData,
@@ -149,6 +218,8 @@ function EducationItem({ id, form, index, remove }: EducationItemProps) {
     isDragging,
   } = useSortable({ id });
 
+  const [customDegree, setCustomDegree] = useState("");
+
   return (
     <div
       className={cn(
@@ -176,7 +247,40 @@ function EducationItem({ id, form, index, remove }: EducationItemProps) {
           <FormItem>
             <FormLabel>Degree</FormLabel>
             <FormControl>
-              <Input {...field} autoFocus />
+              <div>
+                <select
+                  {...field}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  onChange={(e) => {
+                    field.onChange(e.target.value);
+                    if (e.target.value !== "Other") {
+                      setCustomDegree("");
+                    }
+                  }}
+                >
+                  <option value="">Select a degree</option>
+                  {Object.entries(groupedDegreeOptions).map(([group, options]) => (
+                    <optgroup key={group} label={group}>
+                      {options.map((deg) => (
+                        <option key={deg} value={deg}>
+                          {deg}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                {field.value === "Other" && (
+                  <Input
+                    className="mt-2"
+                    placeholder="Enter your degree"
+                    value={customDegree}
+                    onChange={(e) => {
+                      setCustomDegree(e.target.value);
+                      field.onChange(e.target.value);
+                    }}
+                  />
+                )}
+              </div>
             </FormControl>
             <FormMessage />
           </FormItem>
