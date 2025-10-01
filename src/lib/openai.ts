@@ -1,5 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
+import { env } from "@/env";
 
-export const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+// Initialize the Google GenAI client with API key
+export const genAI = new GoogleGenAI({
+  apiKey: env.GEMINI_API_KEY,
+});
 
-export const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// No wrapper needed — call genAI.models.generateContent directly in actions
