@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SignJWT } from "jose";
-import { auth } from "@clerk/nextjs/server"; // adjust to LoomCV's actual Clerk import path
-// import { prisma } from "@/lib/prisma";           // adjust to LoomCV's actual Prisma client path
-// import { getUserSubscriptionTier } from "@/lib/billing"; // LoomCV's existing Stripe tier check
+import { auth } from "@clerk/nextjs/server";
+import prisma from "@/lib/prisma";
+import { getUserSubscriptionLevel } from "@/lib/subscription";
 
 const secret = () => new TextEncoder().encode(process.env.ATS_HANDOFF_SECRET!);
 
@@ -24,11 +24,12 @@ export async function POST(req: NextRequest) {
 
   // IMPORTANT: verify the resume actually belongs to this user before
   // minting a token for it — do not skip this check.
-  // const resume = await prisma.resume.findFirst({ where: { id: resumeId, userId } });
-  // if (!resume) return NextResponse.json({ error: "Resume not found." }, { status: 404 });
+  const resume = await prisma.resume.findFirst({ where: { id: resumeId, userId } });
+  if (!resume) {
+    return NextResponse.json({ error: "Resume not found." }, { status: 404 });
+  }
 
-  // const subscriptionTier = await getUserSubscriptionTier(userId); // "free" | "premium"
-  const subscriptionTier = "free"; // placeholder — wire up to LoomCV's existing Stripe check
+  const subscriptionTier = await getUserSubscriptionLevel(userId); // "free" | "pro" | "pro_plus"
 
   const token = await new SignJWT({ resumeId, userId, subscriptionTier })
     .setProtectedHeader({ alg: "HS256" })
