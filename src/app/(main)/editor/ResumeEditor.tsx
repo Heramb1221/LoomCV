@@ -6,6 +6,7 @@ import { cn, mapToResumeValues } from "@/lib/utils";
 import { ResumeValues } from "@/lib/validation";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { AtsScoreButton } from "@/components/AtsScoreButton";
 import Breadcrumbs from "./Breadcrumbs";
 import Footer from "./Footer";
 import ResumePreviewSection from "./ResumePreviewSection";
@@ -25,7 +26,7 @@ export default function ResumeEditor({ resumeToEdit }: ResumeEditorProps) {
 
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
 
-  const { isSaving, hasUnsavedChanges } = useAutoSaveResume(resumeData);
+  const { isSaving, hasUnsavedChanges, resumeId } = useAutoSaveResume(resumeData);
 
   useUnloadWarning(hasUnsavedChanges);
 
@@ -43,12 +44,19 @@ export default function ResumeEditor({ resumeToEdit }: ResumeEditorProps) {
 
   return (
     <div className="flex grow flex-col">
-      <header className="space-y-1.5 border-b px-3 py-5 text-center">
-        <h1 className="text-2xl font-bold">Design your resume</h1>
-        <p className="text-sm text-muted-foreground">
-          Follow the steps below to create your resume. Your progress will be
-          saved automatically.
-        </p>
+      <header className="flex flex-col items-center justify-between gap-3 border-b px-3 py-5 sm:flex-row sm:text-left text-center">
+        <div className="space-y-1.5">
+          <h1 className="text-2xl font-bold">Design your resume</h1>
+          <p className="text-sm text-muted-foreground">
+            Follow the steps below to create your resume. Your progress will be
+            saved automatically.
+          </p>
+        </div>
+        {resumeId && (
+          <div className="flex-shrink-0">
+            <AtsScoreButton resumeId={resumeId} />
+          </div>
+        )}
       </header>
       <main className="relative grow">
         <div className="absolute bottom-0 top-0 flex w-full">

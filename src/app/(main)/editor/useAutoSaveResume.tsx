@@ -108,5 +108,6 @@ export default function useAutoSaveResume(resumeData: ResumeValues) {
     isSaving,
     hasUnsavedChanges:
       JSON.stringify(resumeData) !== JSON.stringify(lastSavedData),
+    resumeId,
   };
 }
