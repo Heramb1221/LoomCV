@@ -14,7 +14,8 @@ const secret = () => new TextEncoder().encode(process.env.ATS_HANDOFF_SECRET!);
  * passed as a Bearer header. This route intentionally does not accept a
  * regular LoomCV session cookie — only the scoped, short-lived token.
  */
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const authHeader = req.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "");
 
@@ -29,12 +30,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ error: "Invalid or expired token." }, { status: 401 });
   }
 
-  if (payload.resumeId !== params.id) {
+  if (payload.resumeId !== id) {
     return NextResponse.json({ error: "Token does not match requested resume." }, { status: 403 });
   }
 
   // const resume = await prisma.resume.findFirst({
-  //   where: { id: params.id, userId: payload.userId as string },
+  //   where: { id, userId: payload.userId as string },
   // });
   // if (!resume) return NextResponse.json({ error: "Resume not found." }, { status: 404 });
 
